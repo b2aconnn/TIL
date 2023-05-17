@@ -13,5 +13,5 @@
 <img src="/Users/hjmac/Desktop/스크린샷 2023-05-16 오후 11.12.43.png" width="500" style="float: left"/>
 
 - JUnit은 @Test 어노테이션을 메서드에 붙이면 테스트 코드로 인식
-- assertEquals() 메소드는 인자로 값은 두 값을 동일한 지 비교함
+- assertEquals() 메소드는 인자로 값은 두 값을 동일한 지 비교
 
