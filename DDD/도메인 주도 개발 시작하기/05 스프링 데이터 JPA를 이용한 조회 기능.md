@@ -85,3 +85,80 @@ List<Order> orders = orderRepository.findAll(ordererSpec);
 
 <br>
 
+# 스프링 데이터 JPA를 이용한 스펙 구현
+
+**스프링 데이터 JPA의 Specification의 정의**
+
+~~~java
+public interface Specification<T> extends Serializable {
+    // where, and, or, not 메서드 등
+    
+    @Nullable
+    Predicate toPredicate(Root<T> root,
+                          CriteriaQuery<?> query,
+                          CriteriaBuilder db);
+}
+~~~
+
+- 지네릭 파입 파라미터 T : JPA 엔티티 타입을 의미
+- toPredicate() : 조건을 표현하는 Predicate를 생성
+
+<br>
+
+**스펙 인터페이스를 구현한 클래스**
+
+~~~java
+public class OrdererIdSpec implements Specification<OrderSummary> {
+    private String ordererId;
+
+    public OrdererIdSpec(String ordererId) {
+        this.ordererId = ordererId;
+    }
+
+    @Override
+    public Predicate toPredicate(Root<OrderSummary> root,
+                                 CriteriaQuery<?> query,
+                                 CriteriaBuilder cb) {
+        return cb.eqauls(root.get(OrderSummary_.ordererId), ordererId);
+    }
+}
+~~~
+
+- OrderSummary에 대한 검색 조건을 구현
+
+- ordererId 프로퍼티 값이 생성자로 전달 받은 ordererId와 동일한 지 비교하는 Predicate 생성
+
+- OrderSummary_는 JPA 정적 메타 모델을 정의한 코드이다.
+
+<br>
+
+**스펙 구현 클래스를 개별적으로 만들지 않고 스펙 생성 기능을 별도로 모은 클래스 **
+
+~~~java
+public class OrderSummarySpecs {
+    public static Specification<OrderSummary> orderId(String odererId) {
+        return (Root<OrderSummary> root, CriteriaQuery<?> query,
+        CriteriaBuilder cb) ->
+                cb.equals(root.<Sting>get("ordererId"), ordererId);
+    }
+
+    public static Specification<OrderSummary> orderDateBetween(LocalDateTime from, LocalDateTime to) {
+        return (Root<OrderSummary> root, CriteriaQuery<?> query,
+        CriteriaBuilder cb)->
+                cb.between(root.get(OrderSummary_.orderDate), from, to);
+    }
+}
+~~~
+
+- 스펙 인터페이스는 함수형 인터페이스이기 때문에 람다식을 이용해 객체를 생성
+
+- 스펙 생성 기능을 별도로 모은 클래스를 정의함으로써 호출하는 쪽에서는 조금 더 간결하게 스펙 생성을 할 수 있음
+
+<br>
+
+**스펙 생성 기능을 호출하는 코드**
+
+~~~java
+Specification<OrderSummary> betweenSpec = OrderSummarySpecs.orderDateBetween(from, to);
+~~~
+
