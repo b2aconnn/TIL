@@ -162,3 +162,15 @@ public class OrderSummarySpecs {
 Specification<OrderSummary> betweenSpec = OrderSummarySpecs.orderDateBetween(from, to);
 ~~~
 
+<br>
+
+# 리포지토리/DAO에서 스펙 사용하기
+
+findAll() 메서드를 호출해서 스펙에 충족하는 엔티티를 검색할 수 있다.
+
+~~~java
+public interface OrderSummaryDao extends Repository<OrderSummary, String> {
+    List<OrderSummary> findAll(Specification<OrderSummary> spec);
+}
+~~~
+
