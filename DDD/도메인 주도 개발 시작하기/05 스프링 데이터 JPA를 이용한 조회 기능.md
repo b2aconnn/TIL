@@ -174,3 +174,57 @@ public interface OrderSummaryDao extends Repository<OrderSummary, String> {
 }
 ~~~
 
+**스펙 구현체를 사용한 엔티티 검색**
+
+~~~java
+// 스펙 객체 생성
+Specification<OrderSummary> spec = new OrdererIdSpec("user1");
+// findAll() 메서드를 이용한 검색
+List<OrderSummary> results = orderSummaryDao.findAll(spec);
+~~~
+
+<br>
+
+# 스펙 조합
+
+스펙 인터페이스는 and(), or(), not(), where() 등의 메서드를 제공한다.
+
+**and(), or()**
+
+~~~java
+public interface Specification<T> extends Serializable {
+    default Specification<T> and(@Nullable Specification<T> other) {...}
+    default Specification<T> or(@Nullable Specification<T> other) {...}
+
+    @Nullable
+    Predicate toPredicate(Root<T> root,
+                          CriteriaQuery<?> query,
+                          CriteriaBuilder criteriaBuilder);
+}
+~~~
+
+- and() : 두 스펙을 모두 충족하는 조건을 표현하는 스펙 생성
+- or() : 두 스펙 중 하나 이상 충족하는 조건을 표현하는 스펙 생성
+
+<br>
+
+**not()**
+
+~~~java
+public static <T> Specifications<T> not(Specification<T> spec)
+~~~
+
+- not() : 조건을 반대로 적용할 때 사용
+
+<br>
+
+**where()**
+
+~~~java
+Specification<OrderSummary> spec = Specification.where(createNullableSpec()).and(createOtherSpec());
+~~~
+
+- where() : 파라미터로 null을 전달하면 아무 조건도 생성하지 않는 스펙 객체를 리턴
+  - spec 객체의 NPE 문제를 고민하지 않아도 된다.
+
+<br>
