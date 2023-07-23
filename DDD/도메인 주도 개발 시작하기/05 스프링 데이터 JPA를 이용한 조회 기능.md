@@ -189,7 +189,7 @@ List<OrderSummary> results = orderSummaryDao.findAll(spec);
 
 스펙 인터페이스는 and(), or(), not(), where() 등의 메서드를 제공한다.
 
-**and(), or()**
+### and(), or()
 
 ~~~java
 public interface Specification<T> extends Serializable {
@@ -208,7 +208,16 @@ public interface Specification<T> extends Serializable {
 
 <br>
 
-**not()**
+**and()를 사용한 예시**
+
+~~~java
+Specification<OrderSummary> spec = OrderSummarySpecs.ordererId("user1")
+        .and(OrderSummarySpecs.orderDateBetween(from, to));
+~~~
+
+<br>
+
+### **not()**
 
 ~~~java
 public static <T> Specifications<T> not(Specification<T> spec)
@@ -218,7 +227,15 @@ public static <T> Specifications<T> not(Specification<T> spec)
 
 <br>
 
-**where()**
+**not()를 사용한 예시**
+
+~~~java
+Specification<OrderSummary> spec = Specification.not(OrderSummarySpecs.ordererId("user1"));
+~~~
+
+<br>
+
+### **where()**
 
 ~~~java
 Specification<OrderSummary> spec = Specification.where(createNullableSpec()).and(createOtherSpec());
@@ -228,3 +245,6 @@ Specification<OrderSummary> spec = Specification.where(createNullableSpec()).and
   - spec 객체의 NPE 문제를 고민하지 않아도 된다.
 
 <br>
+
+# 정렬 지정하기
+
