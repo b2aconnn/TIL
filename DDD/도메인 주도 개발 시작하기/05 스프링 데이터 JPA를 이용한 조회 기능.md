@@ -248,3 +248,8 @@ Specification<OrderSummary> spec = Specification.where(createNullableSpec()).and
 
 # 정렬 지정하기
 
+스프링 데이터 JPA는 두 가지 방법을 사용해서 정렬을 지정할 수 있다.
+
+- 메서드 이름에 OrderBy를 사용해서 정렬 기준 지정
+- Sort를 인자로 전달
+
