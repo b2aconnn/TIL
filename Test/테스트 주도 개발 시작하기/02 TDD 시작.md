@@ -10,7 +10,7 @@
 
 ### CalculatorTest
 
-<img src="/Users/hjmac/Desktop/스크린샷 2023-05-16 오후 11.12.43.png" width="500" style="float: left"/>
+<img width="500" alt="스크린샷 2023-05-16 오후 11 12 43" src="https://github.com/b2aconnn/TIL/assets/101120568/9e0b2455-7722-4618-8273-e049ee7c841f">
 
 - JUnit은 @Test 어노테이션을 메서드에 붙이면 테스트 코드로 인식
 - assertEquals() 메소드는 인자로 값은 두 값을 동일한 지 비교. 동일하지 않을 시 AssertFailedError 발생
